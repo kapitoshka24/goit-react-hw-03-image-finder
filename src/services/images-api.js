@@ -8,5 +8,4 @@ const fetchImages = ({ searchQuery = "", currentPage = 1 }) => {
   ).then((response) => response.data.hits);
 };
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default { fetchImages };
+export { fetchImages };

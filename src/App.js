@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Searchbar from "./Searchbar/Searchbar";
 import "./App.css";
-import imagesApi from "./services/images-api";
+import * as imagesApi from "./services/images-api";
 import ImageGallery from "./ImageGallery";
 import Button from "./Button";
 import Loader from "react-loader-spinner";
@@ -88,7 +88,11 @@ class App extends Component {
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
-        {error && <h1 className="Error">Something went wrong on a server side, try again later.</h1>}
+        {error && (
+          <h1 className="Error">
+            Something went wrong on a server side, try again later.
+          </h1>
+        )}
         {!error && (
           <>
             <ImageGallery images={images} onImageClick={this.onImageClick} />
