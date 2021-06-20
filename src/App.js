@@ -16,6 +16,7 @@ class App extends Component {
     tags: "",
     showModal: false,
     isLoading: false,
+    error: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -35,6 +36,7 @@ class App extends Component {
       searchQuery: value,
       currentPage: 1,
       images: [],
+      error: null,
     });
   };
 
@@ -53,6 +55,7 @@ class App extends Component {
         }));
         this.scrollDown();
       })
+      .catch((error) => this.setState({ error }))
       .finally(() => this.setState({ isLoading: false }));
   };
 
@@ -78,32 +81,40 @@ class App extends Component {
   };
 
   render() {
-    const { images, isLoading, showModal, largeImageURL, tags } = this.state;
+    const { images, isLoading, showModal, largeImageURL, tags, error } =
+      this.state;
     const shouldRenderLoadMoreButton = images.length > 0 && !isLoading;
 
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
-        <ImageGallery images={images} onImageClick={this.onImageClick} />
+        {error && <h1 className="Error">Something went wrong on a server side, try again later.</h1>}
+        {!error && (
+          <>
+            <ImageGallery images={images} onImageClick={this.onImageClick} />
 
-        {shouldRenderLoadMoreButton && <Button onClick={this.fetchImages} />}
+            {shouldRenderLoadMoreButton && (
+              <Button onClick={this.fetchImages} />
+            )}
 
-        {isLoading && (
-          <Loader
-            className="Loader"
-            type="Bars"
-            color="#3f51b5"
-            height={70}
-            width={70}
-          />
-        )}
+            {isLoading && (
+              <Loader
+                className="Loader"
+                type="Bars"
+                color="#3f51b5"
+                height={70}
+                width={70}
+              />
+            )}
 
-        {showModal && (
-          <Modal
-            largeImage={largeImageURL}
-            tags={tags}
-            onClose={this.onClose}
-          />
+            {showModal && (
+              <Modal
+                largeImage={largeImageURL}
+                tags={tags}
+                onClose={this.onClose}
+              />
+            )}
+          </>
         )}
       </>
     );
